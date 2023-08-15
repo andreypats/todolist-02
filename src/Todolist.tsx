@@ -4,11 +4,14 @@ import {FilterValueType} from "./App";
 export const Todolist = (props: PropsType) => {
 
     let [taskTitle, setTaskTitle] = useState('')
+    let [error, setError] = useState<string | null>(null)
 
     const addTaskTitle = () => {
         if (taskTitle.trim() !== '') {
             props.addTask(taskTitle.trim())
             setTaskTitle('')
+        } else {
+            setError('Title is required')
         }
     }
 
@@ -17,6 +20,7 @@ export const Todolist = (props: PropsType) => {
     }
 
     const onKeyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        setError(null)
         if (event.key === 'Enter') {
             addTaskTitle()
         }
@@ -41,8 +45,10 @@ export const Todolist = (props: PropsType) => {
                 <input value={taskTitle}
                        onChange={onChangeInputHandler}
                        onKeyDown={onKeyDownHandler}
+                       className={error ? 'error' : ''}
                 />
                 <button onClick={addTaskTitle}>+</button>
+                {error && <div className={'error-message'}>{error}</div>}
             </div>
             <ul>
                 {props.tasks.map((task, index) => {
@@ -65,13 +71,21 @@ export const Todolist = (props: PropsType) => {
                 })}
             </ul>
             <div>
-                <button onClick={onAllClickHandler}>All</button>
-                <button onClick={onActiveClickHandler}>Active</button>
-                <button onClick={onCompletedClickHandler}>Completed</button>
+                <button className={props.filter === 'all' ? 'active-filter' : ''}
+                        onClick={onAllClickHandler}>
+                    All
+                </button>
+                <button className={props.filter === 'active' ? 'active-filter' : ''}
+                        onClick={onActiveClickHandler}>
+                    Active
+                </button>
+                <button className={props.filter === 'completed' ? 'active-filter' : ''}
+                        onClick={onCompletedClickHandler}>
+                    Completed
+                </button>
             </div>
         </div>
     )
-
 }
 
 type TaskType = {
@@ -87,4 +101,5 @@ type PropsType = {
     removeTask: (id: string) => void
     changeFilter: (value: FilterValueType) => void
     changeTaskStatus: (id: string, isDone: boolean) => void
+    filter: FilterValueType
 }
