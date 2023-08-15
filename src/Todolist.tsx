@@ -6,8 +6,10 @@ export const Todolist = (props: PropsType) => {
     let [taskTitle, setTaskTitle] = useState('')
 
     const addTaskTitle = () => {
-        props.addTask(taskTitle)
-        setTaskTitle('')
+        if (taskTitle.trim() !== '') {
+            props.addTask(taskTitle.trim())
+            setTaskTitle('')
+        }
     }
 
     const onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +52,7 @@ export const Todolist = (props: PropsType) => {
                     }
 
                     const onChangeCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                        props.changeTaskStatus (task.id, event.currentTarget.checked)
+                        props.changeTaskStatus(task.id, event.currentTarget.checked)
                     }
 
                     return (
