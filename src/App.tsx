@@ -31,14 +31,22 @@ function App() {
     let tasksForTodolist = tasks  //здесь храним отфильтрованные таски
 
     if (filter === 'active') {
-        tasksForTodolist = tasks.filter((task) => task.isDone)
+        tasksForTodolist = tasks.filter((task) => !task.isDone)
     }
     if (filter === 'completed') {
-        tasksForTodolist = tasks.filter((task) => !task.isDone)
+        tasksForTodolist = tasks.filter((task) => task.isDone)
     }
 
     const changeFilter = (value: FilterValueType) => {
         setFilter(value)
+    }
+
+    const changeTaskStatus = (id: string, isDone: boolean) => {
+        let changedTask = tasks.find(task => task.id === id)
+        if (changedTask) {
+            changedTask.isDone = isDone
+            setTasks([...tasks])
+        }
     }
 
     return (
@@ -49,6 +57,7 @@ function App() {
                 addTask={addTask}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
+                changeTaskStatus={changeTaskStatus}
             />
         </div>
     );
