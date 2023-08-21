@@ -8,7 +8,7 @@ export const Todolist = (props: PropsType) => {
 
     const addTaskTitle = () => {
         if (taskTitle.trim() !== '') {
-            props.addTask(taskTitle.trim())
+            props.addTask(taskTitle.trim(), props.id)
             setTaskTitle('')
         } else {
             setError('Title is required')
@@ -38,9 +38,14 @@ export const Todolist = (props: PropsType) => {
         props.changeFilter('completed', props.id)
     }
 
+    const deleteTodolistClickHandler = () => {
+        props.removeTodolist(props.id)
+    }
+
     return (
         <div>
-            <h3>{props.title}</h3>
+            <strong>{props.title}</strong>
+            <button onClick={deleteTodolistClickHandler}>✖️</button>
             <div>
                 <input value={taskTitle}
                        onChange={onChangeInputHandler}
@@ -54,11 +59,11 @@ export const Todolist = (props: PropsType) => {
                 {props.tasks.map((task, index) => {
 
                     const onClickHandler = () => {
-                        props.removeTask(task.id)
+                        props.removeTask(task.id, props.id)
                     }
 
                     const onChangeCheckboxHandler = (event: ChangeEvent<HTMLInputElement>) => {
-                        props.changeTaskStatus(task.id, event.currentTarget.checked)
+                        props.changeTaskStatus(task.id, event.currentTarget.checked, props.id)
                     }
 
                     return (
@@ -88,7 +93,7 @@ export const Todolist = (props: PropsType) => {
     )
 }
 
-type TaskType = {
+export type TaskType = {
     id: string
     title: string
     isDone: boolean
@@ -98,9 +103,10 @@ type PropsType = {
     id: string
     title: string
     tasks: Array<TaskType>
-    addTask: (taskTitle: string) => void
-    removeTask: (id: string) => void
+    addTask: (taskTitle: string, todolistId: string) => void
+    removeTask: (id: string, todolistId: string) => void
     changeFilter: (value: FilterValueType, todolistId: string) => void
-    changeTaskStatus: (id: string, isDone: boolean) => void
+    changeTaskStatus: (id: string, isDone: boolean, todolistId: string) => void
     filter: FilterValueType
+    removeTodolist: (todolistId: string) => void
 }

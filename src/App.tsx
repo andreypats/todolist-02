@@ -1,34 +1,48 @@
 import React, {useState} from 'react';
 import {v1} from 'uuid';
 import './App.css';
-import {Todolist} from "./Todolist";
+import {TaskType, Todolist} from "./Todolist";
 
 function App() {
 
-    let [todolists, setTodolists] = useState<Array<TodolistsType>>(
-        [
-            {id: v1(), title: 'What to learn', filter: 'all'},
-            {id: v1(), title: 'What to buy', filter: 'all'},
-        ]
-    )
+    let todolistID1 = v1()
+    let todolistID2 = v1()
 
-    let [tasks, setTasks] = useState([
-        {id: v1(), title: "HTML&CSS", isDone: true},
-        {id: v1(), title: "JS", isDone: true},
-        {id: v1(), title: "ReactJS", isDone: false},
-        {id: v1(), title: "Rest API", isDone: false},
-        {id: v1(), title: "GraphQL", isDone: false},
+    let [todolists, setTodolists] = useState<Array<TodolistsType>>([
+        {id: todolistID1, title: 'What to learn', filter: 'all'},
+        {id: todolistID2, title: 'What to buy', filter: 'all'},
     ])
 
-    const addTask = (taskTitle: string) => {
-        let task = {id: v1(), title: taskTitle, isDone: false};
-        let newTasks = [task, ...tasks];
-        setTasks(newTasks)
+    let [tasks, setTasks] = useState<TasksStateType>({
+        [todolistID1]: [
+            {id: v1(), title: 'HTML&CSS', isDone: true},
+            {id: v1(), title: 'JS', isDone: true},
+            {id: v1(), title: 'ReactJS', isDone: false},
+
+        ],
+        [todolistID2]: [
+            {id: v1(), title: 'Rest API', isDone: true},
+            {id: v1(), title: 'GraphQL', isDone: false},
+        ]
+    })
+
+    const removeTodolist = (todolistId: string) => {
+        setTodolists(todolists.filter((todolist) => todolist.id !== todolistId))
+        delete tasks[todolistId]
+        setTasks({...tasks})
     }
 
-    const removeTask = (id: string) => {
-        let filteredTasks = tasks.filter((task) => (task.id !== id))
-        setTasks(filteredTasks)
+    const addTask = (taskTitle: string, todolistId: string) => {
+        let task = {id: v1(), title: taskTitle, isDone: false};
+        let todolistTasks = tasks[todolistId]
+        tasks[todolistId] = [task, ...todolistTasks];
+        setTasks({...tasks})
+    }
+
+    const removeTask = (id: string, todolistId: string) => {
+        let todolistTasks = tasks[todolistId]
+        tasks[todolistId] = todolistTasks.filter((task) => (task.id !== id))
+        setTasks({...tasks})
     }
 
     const changeFilter = (value: FilterValueType, todolistId: string) => {
@@ -39,11 +53,12 @@ function App() {
         }
     }
 
-    const changeTaskStatus = (id: string, isDone: boolean) => {
-        let changedTask = tasks.find(task => task.id === id)
+    const changeTaskStatus = (id: string, isDone: boolean, todolistId: string) => {
+        let todolistTasks = tasks[todolistId]
+        let changedTask = todolistTasks.find(task => task.id === id)
         if (changedTask) {
             changedTask.isDone = isDone
-            setTasks([...tasks])
+            setTasks({...tasks})
         }
     }
 
@@ -52,13 +67,14 @@ function App() {
             {
                 todolists.map(todolist => {
 
-                    let tasksForTodolist = tasks  //здесь храним отфильтрованные таски
+                    let allTodolistsTasks = tasks[todolist.id]
+                    let tasksForTodolist = allTodolistsTasks
 
                     if (todolist.filter === 'active') {
-                        tasksForTodolist = tasks.filter((task) => !task.isDone)
+                        tasksForTodolist = allTodolistsTasks.filter((task) => !task.isDone)
                     }
                     if (todolist.filter === 'completed') {
-                        tasksForTodolist = tasks.filter((task) => task.isDone)
+                        tasksForTodolist = allTodolistsTasks.filter((task) => task.isDone)
                     }
 
                     return <Todolist
@@ -71,6 +87,7 @@ function App() {
                         changeFilter={changeFilter}
                         changeTaskStatus={changeTaskStatus}
                         filter={todolist.filter}
+                        removeTodolist={removeTodolist}
                     />
                 })
             }
@@ -86,4 +103,8 @@ type TodolistsType = {
     id: string
     title: string
     filter: FilterValueType
+}
+
+type TasksStateType = {
+    [key: string]: Array<TaskType>
 }
