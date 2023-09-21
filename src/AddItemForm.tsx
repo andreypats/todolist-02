@@ -1,4 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
+import {Button} from "@mui/material";
 
 export const AddItemForm = (props: AddItemFormType) => {
 
@@ -32,7 +33,12 @@ export const AddItemForm = (props: AddItemFormType) => {
                    onKeyDown={onKeyDownHandler}
                    className={error ? 'error' : ''}
             />
-            <button onClick={addTaskTitle}>+</button>
+            <Button
+                variant = 'contained'
+                color = 'primary'
+                style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}
+                onClick={addTaskTitle}
+            >+</Button>
             {error && <div className={'error-message'}>{error}</div>}
         </div>
     );
