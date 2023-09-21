@@ -1,5 +1,7 @@
 import React, {ChangeEvent, useState} from 'react';
-import {Button, TextField} from "@mui/material";
+import {TextField} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import {AddBox} from "@mui/icons-material";
 
 export const AddItemForm = (props: AddItemFormType) => {
 
@@ -36,12 +38,10 @@ export const AddItemForm = (props: AddItemFormType) => {
                        label= 'Title'
                        helperText={error}
             />
-            <Button
-                variant='contained'
-                color='primary'
-                style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}
-                onClick={addTaskTitle}
-            >+</Button>
+            <IconButton color='primary'
+                        onClick={addTaskTitle}>
+                <AddBox/>
+            </IconButton>
         </div>
     );
 };
