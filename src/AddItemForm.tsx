@@ -1,5 +1,5 @@
 import React, {ChangeEvent, useState} from 'react';
-import {Button} from "@mui/material";
+import {Button, TextField} from "@mui/material";
 
 export const AddItemForm = (props: AddItemFormType) => {
 
@@ -28,18 +28,20 @@ export const AddItemForm = (props: AddItemFormType) => {
 
     return (
         <div>
-            <input value={taskTitle}
-                   onChange={onChangeInputHandler}
-                   onKeyDown={onKeyDownHandler}
-                   className={error ? 'error' : ''}
+            <TextField variant='outlined'
+                       value={taskTitle}
+                       onChange={onChangeInputHandler}
+                       onKeyDown={onKeyDownHandler}
+                       error={!!error}
+                       label= 'Title'
+                       helperText={error}
             />
             <Button
-                variant = 'contained'
-                color = 'primary'
+                variant='contained'
+                color='primary'
                 style={{maxWidth: '30px', maxHeight: '30px', minWidth: '30px', minHeight: '30px'}}
                 onClick={addTaskTitle}
             >+</Button>
-            {error && <div className={'error-message'}>{error}</div>}
         </div>
     );
 };
