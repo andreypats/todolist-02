@@ -1,6 +1,6 @@
 import React, {ChangeEvent, useState} from 'react';
 import {TextField} from "@mui/material";
-import IconButton from "@mui/material/IconButton";
+import {IconButton} from "@mui/material";
 import {AddBox} from "@mui/icons-material";
 
 export const AddItemForm = (props: AddItemFormType) => {

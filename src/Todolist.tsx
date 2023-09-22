@@ -44,7 +44,7 @@ export const Todolist = (props: PropsType) => {
                 <DeleteIcon/>
             </IconButton>
             <AddItemForm addItem={addTask}/>
-            <ul>
+            <div>
                 {props.tasks.map((task, index) => {
 
                     const onClickHandler = () => {
@@ -60,7 +60,7 @@ export const Todolist = (props: PropsType) => {
                     };
 
                     return (
-                        <li key={index} className={task.isDone ? 'is-done' : ''}>
+                        <div key={index} className={task.isDone ? 'is-done' : ''}>
                             <Checkbox
                                 color='primary'
                                 checked={task.isDone}
@@ -73,10 +73,10 @@ export const Todolist = (props: PropsType) => {
                             >
                                 <DeleteIcon/>
                             </IconButton>
-                        </li>
+                        </div>
                     )
                 })}
-            </ul>
+            </div>
             <div>
                 <Button variant={props.filter === 'all' ? 'outlined' : 'text'}
                         onClick={onAllClickHandler}
