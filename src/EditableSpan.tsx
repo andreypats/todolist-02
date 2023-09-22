@@ -27,7 +27,7 @@ export const EditableSpan = (props: EditableSpanType) => {
                      onChange={onChangeInputHandler}
                      autoFocus
         />
-        : <span onDoubleClick={activateEditMode}>{title}</span>
+        : <span onDoubleClick={activateEditMode}>{props.title}</span>
 
 };
 
