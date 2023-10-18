@@ -10,7 +10,7 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
             state[action.todolistId] = todolistTasks.filter((task) => (task.id !== action.id))
             return {...state}
         case 'ADD-TASK':
-            let task = {id: v1(), title: action.taskTitle, isDone: false};
+            let task = {id: action.todolistId, title: action.taskTitle, isDone: false};
             state[action.todolistId] = [task, ...state[action.todolistId]];
             return {...state}
         case 'CHANGE-TASK-STATUS':
@@ -25,6 +25,10 @@ export const tasksReducer = (state: TasksStateType, action: ActionType) => {
                 changedTaskTitle.title = action.newTitle
             }
             return {...state}
+        case 'ADD-TODOLIST':
+            const stateCopy = {...state}
+            stateCopy[v1()] = []
+            return stateCopy
 
         default:
             throw new Error('I don\'t understand this type')
