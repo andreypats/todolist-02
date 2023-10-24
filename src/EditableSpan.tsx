@@ -1,37 +1,29 @@
 import React, {ChangeEvent, useState} from 'react';
 import {TextField} from "@mui/material";
 
-export const EditableSpan = (props: EditableSpanType) => {
+type EditableSpanPropsType = {
+    value: string
+    onChange: (newValue: string) => void
+}
 
+export function EditableSpan(props: EditableSpanPropsType) {
     let [editMode, setEditMode] = useState(false);
-    let [title, setTitle] = useState(props.title);
+    let [title, setTitle] = useState(props.value);
 
     const activateEditMode = () => {
         setEditMode(true);
-        setTitle(props.title)
-    };
-
+        setTitle(props.value);
+    }
     const activateViewMode = () => {
         setEditMode(false);
-        props.onChange(title)
-    };
-
-    const onChangeInputHandler = (event: ChangeEvent<HTMLInputElement>) => {
-        setTitle(event.currentTarget.value)
+        props.onChange(title);
+    }
+    const changeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+        setTitle(e.currentTarget.value)
     }
 
     return editMode
-        ? <TextField variant='outlined'
-                     value={title}
-                     onBlur={activateViewMode}
-                     onChange={onChangeInputHandler}
-                     autoFocus
-        />
-        : <span onDoubleClick={activateEditMode}>{props.title}</span>
-
-};
-
-type EditableSpanType = {
-    title: string
-    onChange: (newTitle: string) => void
+        ?    <TextField variant="outlined"
+                        value={title} onChange={changeTitle} autoFocus onBlur={activateViewMode} />
+        : <span onDoubleClick={activateEditMode}>{props.value}</span>
 }
