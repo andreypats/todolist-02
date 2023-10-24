@@ -6,15 +6,15 @@ import {AddItemForm} from "./AddItemForm";
 import {AppBar, Button, Container, Grid, Paper, Toolbar, Typography} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import {Menu} from "@mui/icons-material";
+import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
 import {
     addTodolistAC,
     changeTodolistFilterAC,
-    changeTodolistTitleAC, removeTodolistAC,
-    todolistsReducer
+    changeTodolistTitleAC,
+    removeTodolistAC, todolistsReducer
 } from "./state/todolists-reducer";
-import {addTaskAC, changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, tasksReducer} from "./state/tasks-reducer";
 
-function App() {
+function AppWithReducers() {
 
     let todolistID1 = v1()
     let todolistID2 = v1()
@@ -37,10 +37,14 @@ function App() {
         ]
     }
 
-
-    let [todolists, dispatchToTodolists] = useReducer (todolistsReducer, todolistsInitialState)
-
     let [tasks, dispatchToTasks] = useReducer (tasksReducer, tasksInitialState)
+
+    let [todolists, dispatchToTodolists] = useReducer (todolistsReducer,
+        [
+            {id: todolistID1, title: 'What to learn', filter: 'all'},
+            {id: todolistID2, title: 'What to buy', filter: 'all'}
+        ]
+        )
 
     const removeTodolist = (todolistId: string) => {
         const action = removeTodolistAC(todolistId)
@@ -145,7 +149,7 @@ function App() {
     );
 }
 
-export default App;
+export default AppWithReducers;
 
 export type FilterValueType = 'all' | 'active' | 'completed'
 
