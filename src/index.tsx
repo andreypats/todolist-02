@@ -1,12 +1,12 @@
 import React from 'react';
 import './index.css';
-import App from './App';
+import AppWithReducers from './AppWithReducers';
 import { createRoot } from 'react-dom/client';
 import * as serviceWorker from './serviceWorker';
 
 const container  = document.getElementById('root') as HTMLElement
 const root = createRoot(container);
-root.render(<App />);
+root.render(<AppWithReducers />);
 
 
 // If you want your app to work offline and load faster, you can change
