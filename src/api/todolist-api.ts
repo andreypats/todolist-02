@@ -27,7 +27,7 @@ export const todolistAPI = {
     },
 
     getTodolists() {
-        const promise = instance.get(
+        const promise = instance.get<Array<TodolistType>>(
             `todo-lists`
         )
         return promise
@@ -39,4 +39,12 @@ export const todolistAPI = {
         )
         return promise
     }
+}
+
+// Types
+type TodolistType = {
+    id: string
+    addedDate: string
+    order: number
+    title: string
 }
