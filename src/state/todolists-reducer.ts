@@ -1,6 +1,6 @@
 import { v1 } from 'uuid';
 import {todolistsAPI, TodolistType} from '../api/todolists-api'
-import {AnyAction, Dispatch} from "redux";
+import {Dispatch} from "redux";
 
 const initialState: Array<TodolistDomainType> = [
     /*{id: todolistId1, title: 'What to learn', filter: 'all', addedDate: '', order: 0},
@@ -68,8 +68,8 @@ export const setTodolistsAC = (todolists: Array<TodolistType>): SetTodolistsActi
 }
 
 
-//Thunks
-export const fetchTodolistsThunk = (dispatch: Dispatch) => {
+// ThunkCreators
+export const fetchTodolistsTC = () => (dispatch: Dispatch) => {
     todolistsAPI.getTodolists()
         .then((res)=>{
             dispatch(setTodolistsAC(res.data))
