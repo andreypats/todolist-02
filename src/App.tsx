@@ -36,7 +36,8 @@ function App() {
     const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
     const dispatch = useDispatch();
 
-    useEffect(()=>{
+    useEffect(() => {
+        // @ts-ignore
         dispatch(fetchTodolistsThunk)
     },[])
 
