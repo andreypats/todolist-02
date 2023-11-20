@@ -24,7 +24,6 @@ type PropsType = {
     removeTodolist: (id: string) => void
     changeTodolistTitle: (id: string, newTitle: string) => void
     filter: FilterValuesType
-
 }
 
 export const Todolist = React.memo(function (props: PropsType) {
@@ -68,7 +67,7 @@ export const Todolist = React.memo(function (props: PropsType) {
                 <Delete/>
             </IconButton>
         </h3>
-        <AddItemForm addItem={addTask}/>
+        <AddItemForm addItem={addTask} disabled={props.entityStatus === 'loading'}/>
         <div>
             {
                 tasksForTodolist.map(t => <Task key={t.id} task={t} todolistId={props.id}
