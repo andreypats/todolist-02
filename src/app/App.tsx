@@ -13,7 +13,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import {Menu} from '@mui/icons-material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {Navigate, Route, Routes} from "react-router-dom";
-import {Login} from "../features/Login";
+import {Login} from "../features/Login/Login";
 
 
 function App() {
