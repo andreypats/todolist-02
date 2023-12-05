@@ -1,8 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import {TodolistsList} from '../features/TodolistsList/TodolistsList'
-import {useAppSelector} from './store'
-import {RequestStatusType} from './app-reducer'
+import {useAppDispatch, useAppSelector} from './store'
+import {initializeAppTC, RequestStatusType} from './app-reducer'
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -18,6 +18,12 @@ import {Login} from "../features/Login/Login";
 
 function App() {
     const status = useAppSelector<RequestStatusType>((state) => state.app.status)
+    const dispatch = useAppDispatch()
+
+    useEffect(()=>{
+        dispatch(initializeAppTC())
+    },[])
+
     return (
         <div className="App">
             <ErrorSnackbar/>
