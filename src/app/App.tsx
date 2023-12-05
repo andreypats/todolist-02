@@ -14,15 +14,24 @@ import {Menu} from '@mui/icons-material';
 import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
 import {Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "../features/Login/Login";
+import {CircularProgress} from "@mui/material";
 
 
 function App() {
     const status = useAppSelector<RequestStatusType>((state) => state.app.status)
+    const isInitialized = useAppSelector<boolean>((state) => state.app.isInitialized)
     const dispatch = useAppDispatch()
 
     useEffect(()=>{
         dispatch(initializeAppTC())
     },[])
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
 
     return (
         <div className="App">
