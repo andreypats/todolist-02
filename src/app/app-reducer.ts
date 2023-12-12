@@ -1,9 +1,62 @@
-import { Dispatch } from "redux";
 import {authAPI} from "api/todolists-api";
 import {authActions} from "features/Login/auth-reducer";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {AppThunk} from "app/store";
+import {handleServerAppError, handleServerNetworkError} from "utils/error-utils";
 
 
-const initialState: InitialStateType = {
+const slice = createSlice({
+    // важно чтобы не дублировалось, будет в качестве приставки согласно соглашению redux ducks
+    name: "app",
+    initialState: {
+        status: "idle",
+        error: '',
+        isInitialized: false,
+    },
+    // состоит из подредьюсеров, каждый из которых эквивалентен одному оператору case в switch, как мы делали раньше (обычный redux)
+    reducers: {
+        setStatus: (state, action: PayloadAction<{ status: RequestStatusType }>) => {
+            state.status = action.payload.status
+        },
+        setError: (state, action: PayloadAction<{ error: string }>) => {
+            state.error = action.payload.error
+        },
+        setIsInitialized: (state, action: PayloadAction<{ isInitialized: boolean }>) => {
+            state.isInitialized = action.payload.isInitialized
+        },
+    },
+});
+
+
+// Создаем reducer с помощью slice
+export const appReducer = slice.reducer;
+
+// Action creator также достаем с помощью slice
+export const appActions = slice.actions;
+
+
+export const initializeAppTC = (): AppThunk => (dispatch) => {
+    authAPI
+        .me()
+        .then((res) => {
+            if (res.data.resultCode === 0) {
+                dispatch(authActions.setIsLoggedIn({isLoggedIn: true}));
+            } else {
+                handleServerAppError(res.data, dispatch);
+            }
+            dispatch(appActions.setIsInitialized({isInitialized: true}));
+        })
+        .catch((error) => {
+            handleServerNetworkError(error, dispatch);
+        });
+};
+
+
+export type AppInitialStateType = ReturnType<typeof slice.getInitialState>
+export type RequestStatusType = "idle" | "loading" | "succeeded" | "failed";
+
+
+/*const initialState: InitialStateType = {
   status: "idle",
   error: null,
   isInitialized: false,
@@ -18,7 +71,7 @@ export const appReducer = (
       return { ...state, status: action.status };
     case "APP/SET-ERROR":
       return { ...state, error: action.error };
-    case "APP/SET-IS-INITIALIED":
+    case "APP/SET-IS-INITIALIZED":
       return { ...state, isInitialized: action.value };
     default:
       return { ...state };
@@ -40,7 +93,7 @@ export const setAppErrorAC = (error: string | null) =>
 export const setAppStatusAC = (status: RequestStatusType) =>
   ({ type: "APP/SET-STATUS", status }) as const;
 export const setAppInitializedAC = (value: boolean) =>
-  ({ type: "APP/SET-IS-INITIALIED", value }) as const;
+  ({ type: "APP/SET-IS-INITIALIZED", value }) as const;
 
 export const initializeAppTC = () => (dispatch: Dispatch) => {
   authAPI.me().then((res) => {
@@ -59,4 +112,5 @@ export type SetAppStatusActionType = ReturnType<typeof setAppStatusAC>;
 type ActionsType =
   | SetAppErrorActionType
   | SetAppStatusActionType
-  | ReturnType<typeof setAppInitializedAC>;
+  | ReturnType<typeof setAppInitializedAC>;*/
+
